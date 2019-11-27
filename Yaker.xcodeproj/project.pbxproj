@@ -26,6 +26,7 @@
 		0EEE4CCD23807B35004211BA /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE4CCC23807B35004211BA /* NewPostViewController.swift */; };
 		0EEE9DC92368DA110059080D /* DismissKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE9DC82368DA110059080D /* DismissKeyboard.swift */; };
 		0EEFEB2A237D6DD700025973 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEFEB29237D6DD700025973 /* PostTableViewCell.swift */; };
+		0EF0E090238EF1080012771C /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF0E08F238EF1080012771C /* Location.swift */; };
 		F1D1D42134EE3592F12674D3 /* Pods_Yaker.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 258D51EFA09581B1514F87AE /* Pods_Yaker.framework */; };
 /* End PBXBuildFile section */
 
@@ -51,6 +52,7 @@
 		0EEE4CCC23807B35004211BA /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
 		0EEE9DC82368DA110059080D /* DismissKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissKeyboard.swift; sourceTree = "<group>"; };
 		0EEFEB29237D6DD700025973 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
+		0EF0E08F238EF1080012771C /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
 		258D51EFA09581B1514F87AE /* Pods_Yaker.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Yaker.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4D452B25D9E32C4DB975A3D0 /* Pods-Yaker.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Yaker.debug.xcconfig"; path = "Target Support Files/Pods-Yaker/Pods-Yaker.debug.xcconfig"; sourceTree = "<group>"; };
 		E8618D1C201EF9009268FE2E /* Pods-Yaker.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Yaker.release.xcconfig"; path = "Target Support Files/Pods-Yaker/Pods-Yaker.release.xcconfig"; sourceTree = "<group>"; };
@@ -121,6 +123,7 @@
 			children = (
 				0EEE19492369EDA0003B4A85 /* User.swift */,
 				0EEE194B2369EE00003B4A85 /* Post.swift */,
+				0EF0E08F238EF1080012771C /* Location.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -272,6 +275,7 @@
 			files = (
 				0EEE39D5236F286800762DF7 /* Alert.swift in Sources */,
 				0EED570E23833C7F00B321D9 /* TimeInterval.swift in Sources */,
+				0EF0E090238EF1080012771C /* Location.swift in Sources */,
 				0EEDF40F237C48F100B1E189 /* HexColor.swift in Sources */,
 				0EEFEB2A237D6DD700025973 /* PostTableViewCell.swift in Sources */,
 				0EEE4CCD23807B35004211BA /* NewPostViewController.swift in Sources */,

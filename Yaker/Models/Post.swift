@@ -10,12 +10,13 @@ import Foundation
 
 class Post {
     
-    var sumOfLikes = 0
+    var sumOfLikes = 1
     var content: String?
     var userId: String?
     var createdAt: Date?
     var id: String?
     var likes: Dictionary<String, Bool>?
+    var locationID: String?
     
     func addOneLike() {
         return sumOfLikes += 1
@@ -26,12 +27,14 @@ class Post {
     }
     
     
-    init(content: String, sumOfLikes: Int, userID: String, createdAt: Date, id: String) {
+    init(content: String, sumOfLikes: Int, userID: String, createdAt: Date, id: String, likes: Dictionary<String, Bool>, locationID: String) {
         self.content = content
         self.sumOfLikes = sumOfLikes
         self.userId = userID
         self.createdAt = createdAt
         self.id = id
+        self.likes = likes
+        self.locationID = locationID
     }
     
     //MARK: Add location

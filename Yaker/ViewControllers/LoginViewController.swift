@@ -25,46 +25,17 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
-        print("=> Current User: \(String(describing: Auth.auth().currentUser))")
-        
-        Auth.auth().addStateDidChangeListener { auth, user in
-          if let user = user {
-            // User is signed in.
-            self.performSegue(withIdentifier: "goToFeed", sender: nil)
-          }
-        }
 
-        
-        dismissKey()
-        
-//        emailTextField.delegate = self
-//        passwordTextField.delegate = self
-        
         loginButton.layer.cornerRadius = 5
         
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        let textFieldColor = UIColor.init(named: "loginAndSignUpTextFieldsBackground")
-
-        // Do any additional setup after loading the view.
-        emailTextField.backgroundColor = textFieldColor
-        passwordTextField.backgroundColor = textFieldColor
-        emailTextField.attributedPlaceholder = NSAttributedString(string: "Email",
-        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
-        passwordTextField.attributedPlaceholder = NSAttributedString(string: "Password",
-        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
-        
-        emailTextField.textContentType = .oneTimeCode
-        passwordTextField.textContentType = .oneTimeCode
+        dismissKey()
+        addKeyboardObservers()
+        setupTextFields()
+        logIn()
     }
     
     deinit {
-        
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        
+        removeKeyboardObservers()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -158,6 +129,41 @@ class LoginViewController: UIViewController {
             }
         }
         
+    }
+    
+    func logIn() {
+        Auth.auth().addStateDidChangeListener { auth, user in
+          if let user = user {
+            // User is signed in.
+            self.performSegue(withIdentifier: "goToFeed", sender: nil)
+          }
+        }
+    }
+    
+    func setupTextFields() {
+
+        let textFieldColor = UIColor.init(named: "loginAndSignUpTextFieldsBackground")
+        
+        emailTextField.backgroundColor = textFieldColor
+        passwordTextField.backgroundColor = textFieldColor
+        emailTextField.attributedPlaceholder = NSAttributedString(string: "Email",
+        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
+        passwordTextField.attributedPlaceholder = NSAttributedString(string: "Password",
+        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
+        
+        emailTextField.textContentType = .oneTimeCode
+        passwordTextField.textContentType = .oneTimeCode
+    }
+    
+    func addKeyboardObservers() {
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(LoginViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    func removeKeyboardObservers() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
 

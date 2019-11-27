@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import CoreLocation
 
 class NewPostViewController: UIViewController {
     
@@ -18,19 +19,21 @@ class NewPostViewController: UIViewController {
     
     var ref: DatabaseReference!
     
+    let currentUserID = Auth.auth().currentUser!.uid
+    
+    let locationManager = CLLocationManager()
+    
+    var userLocation = [Double]()
+    
+    var currentRegion: CLRegion?
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         ref = Database.database().reference()
-        
-        newPostTextView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
-        
-        newPostView.layer.cornerRadius = 10
-        newPostButton.layer.cornerRadius = 10
-        cancelButton.layer.cornerRadius = 10
-
-        // Do any additional setup after loading the view.
+                
+        setupViews()
         
         self.dismissKey()
     }
@@ -57,11 +60,15 @@ class NewPostViewController: UIViewController {
         
         let postID = newPost.key!
         
-        let likesDictionary = [Auth.auth().currentUser?.uid: false]
+        let likesDictionary = [currentUserID: true]
+        
+        let userLocationCoordinates = userLocation.prefix(2)
+        
+
         
         let newPostInfo = ["content": String(newPostText!),
-                           "userID": String(Auth.auth().currentUser!.uid),
-                           "sumOfLikes": 0,
+                           "userID": String(currentUserID),
+                           "sumOfLikes": 1,
                            "createdAt": date,
                            "id": postID,
                            "likes": likesDictionary] as [String : AnyObject]
@@ -70,6 +77,13 @@ class NewPostViewController: UIViewController {
         
         self.dismiss(animated: true, completion: nil)
         
+    }
+    
+    func setupViews() {
+        newPostTextView.backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
+        newPostView.layer.cornerRadius = 10
+        newPostButton.layer.cornerRadius = 10
+        cancelButton.layer.cornerRadius = 10
     }
     
 }

@@ -422,7 +422,7 @@
                                         </constraints>
                                         <state key="normal" image="write"/>
                                         <connections>
-                                            <segue destination="QcC-gj-dxt" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="CAd-3H-F2e"/>
+                                            <segue destination="QcC-gj-dxt" kind="presentation" identifier="goToNewPost" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="CAd-3H-F2e"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -654,6 +654,6 @@
         <image name="write" width="512" height="512"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="IZB-3e-6dc"/>
+        <segue reference="D3U-2D-i07"/>
     </inferredMetricsTieBreakers>
 </document>

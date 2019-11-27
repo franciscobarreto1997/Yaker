@@ -23,42 +23,23 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var signUpButtonBottomConstraint: NSLayoutConstraint!
     
     var ref: DatabaseReference!
+    
+    var currentUserID = Auth.auth().currentUser!.uid
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         ref = Database.database().reference()
         
-        dismissKey()
-        
         signUpButton.layer.cornerRadius = 5
         
-        NotificationCenter.default.addObserver(self, selector: #selector(SignUpViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(SignUpViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
-        
-        let textFieldColor = UIColor.init(named: "loginAndSignUpTextFieldsBackground")
-
-        // Do any additional setup after loading the view.
-        emailTextField.backgroundColor = textFieldColor
-        usernameTextField.backgroundColor = textFieldColor
-        passwordTextField.backgroundColor = textFieldColor
-        confirmPasswordTextField.backgroundColor = textFieldColor
-        
-        emailTextField.attributedPlaceholder = NSAttributedString(string: "Email",
-        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
-        usernameTextField.attributedPlaceholder = NSAttributedString(string: "Username",
-        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
-        passwordTextField.attributedPlaceholder = NSAttributedString(string: "Password",
-        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
-        confirmPasswordTextField.attributedPlaceholder = NSAttributedString(string: "Confirm Password",
-        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
+        dismissKey()
+        setupTextFields()
+        addKeyboardObservers()
     }
     
     deinit {
-        
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
-        
+        removeKeyboardObservers()
     }
     
     @IBAction func signUpButtonTapped(_ sender: UIButton) {
@@ -167,6 +148,36 @@ class SignUpViewController: UIViewController {
             }
         }
         
+    }
+    
+    func setupTextFields() {
+        
+        let textFieldColor = UIColor.init(named: "loginAndSignUpTextFieldsBackground")
+        
+        emailTextField.backgroundColor = textFieldColor
+        usernameTextField.backgroundColor = textFieldColor
+        passwordTextField.backgroundColor = textFieldColor
+        confirmPasswordTextField.backgroundColor = textFieldColor
+               
+        emailTextField.attributedPlaceholder = NSAttributedString(string: "Email",
+        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
+        usernameTextField.attributedPlaceholder = NSAttributedString(string: "Username",
+        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
+        passwordTextField.attributedPlaceholder = NSAttributedString(string: "Password",
+        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
+        confirmPasswordTextField.attributedPlaceholder = NSAttributedString(string: "Confirm Password",
+        attributes: [NSAttributedString.Key.foregroundColor: #colorLiteral(red: 0.803833425, green: 0.8039723635, blue: 0.8038246036, alpha: 1)])
+    }
+    
+    func addKeyboardObservers() {
+        NotificationCenter.default.addObserver(self, selector: #selector(SignUpViewController.keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SignUpViewController.keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    
+    }
+    
+    func removeKeyboardObservers() {
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
     }
     
 
