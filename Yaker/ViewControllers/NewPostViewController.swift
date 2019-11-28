@@ -22,17 +22,15 @@ class NewPostViewController: UIViewController {
     let currentUserID = Auth.auth().currentUser!.uid
     
     let locationManager = CLLocationManager()
-    
-    var userLocation = [Double]()
-    
+        
     var currentRegion: CLRegion?
     
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        ref = Database.database().reference()
                 
+        ref = Database.database().reference()
+                        
         setupViews()
         
         self.dismissKey()
@@ -62,10 +60,6 @@ class NewPostViewController: UIViewController {
         
         let likesDictionary = [currentUserID: true]
         
-        let userLocationCoordinates = userLocation.prefix(2)
-        
-
-        
         let newPostInfo = ["content": String(newPostText!),
                            "userID": String(currentUserID),
                            "sumOfLikes": 1,
@@ -73,7 +67,24 @@ class NewPostViewController: UIViewController {
                            "id": postID,
                            "likes": likesDictionary] as [String : AnyObject]
         
-        newPost.setValue(newPostInfo)
+        ref.child("locations").observeSingleEvent(of: .value) { (snapshot) in
+            let locations = snapshot.value as! [String: AnyObject]
+            var name: String?
+            var locationID: String?
+            for location in locations {
+                name = location.value["name"] as? String
+                if name == self.currentRegion?.identifier {
+                    locationID = location.key
+                    self.ref.child("locations").child(locationID!).child("posts").childByAutoId().setValue(newPostInfo)
+                    return
+                } else {
+                    return
+                }
+            }
+            
+        }
+        
+        
         
         self.dismiss(animated: true, completion: nil)
         

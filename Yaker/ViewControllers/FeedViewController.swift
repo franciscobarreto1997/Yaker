@@ -26,9 +26,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     private var locations = [Location]()
     
     var ref: DatabaseReference!
-    
-    var userLocation = [Double]()
-    
+        
     var currentRegion: CLRegion?
     
     let currentUserID = Auth.auth().currentUser!.uid
@@ -40,8 +38,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                 
         ref = Database.database().reference()
         
-        createLocations()
-        setupLocationServices()
+//        createLocations()
         getLocations()
         getPosts()
         setupTableView()
@@ -187,7 +184,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                 dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
                 let date = dateFormatter.date(from: createdAt)
                                 
-                let newPost = Post(content: content, sumOfLikes: sumOfLikes, userID: userID, createdAt: date!, id: postID, likes: likes, locationID: "nothing for now")
+                let newPost = Post(content: content, sumOfLikes: sumOfLikes, userID: userID, createdAt: date!, id: postID, likes: likes)
                 
                 self.posts.append(newPost)
                 
@@ -273,6 +270,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                 self.locations.append(newLocation)
             }
             self.monitorRegions()
+            self.setupLocationServices()
             
         }
     }
@@ -294,14 +292,18 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
-        userLocation.append(locValue.latitude)
-        userLocation.append(locValue.longitude)
+        
+        let homeLocation = self.locations[0]
+        
+        let userLocation = Location(name: "user", latitude: locValue.latitude, longitude: locValue.longitude)
+        if (userLocation.geofenceRegion!.intersects(homeLocation.geofenceRegion!)) {
+            currentRegion = homeLocation.geofenceRegion
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToNewPost" {
             let newPostViewController = segue.destination as? NewPostViewController
-            newPostViewController?.userLocation = userLocation
             newPostViewController?.currentRegion = currentRegion
         }
     }

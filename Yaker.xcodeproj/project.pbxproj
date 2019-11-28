@@ -24,6 +24,7 @@
 		0EEE39D3236F27A200762DF7 /* Validations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE39D2236F27A200762DF7 /* Validations.swift */; };
 		0EEE39D5236F286800762DF7 /* Alert.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE39D4236F286800762DF7 /* Alert.swift */; };
 		0EEE4CCD23807B35004211BA /* NewPostViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE4CCC23807B35004211BA /* NewPostViewController.swift */; };
+		0EEE78F3239002F20009D8D8 /* RegionIntersects.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE78F2239002F20009D8D8 /* RegionIntersects.swift */; };
 		0EEE9DC92368DA110059080D /* DismissKeyboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEE9DC82368DA110059080D /* DismissKeyboard.swift */; };
 		0EEFEB2A237D6DD700025973 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EEFEB29237D6DD700025973 /* PostTableViewCell.swift */; };
 		0EF0E090238EF1080012771C /* Location.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EF0E08F238EF1080012771C /* Location.swift */; };
@@ -50,6 +51,7 @@
 		0EEE39D2236F27A200762DF7 /* Validations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validations.swift; sourceTree = "<group>"; };
 		0EEE39D4236F286800762DF7 /* Alert.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alert.swift; sourceTree = "<group>"; };
 		0EEE4CCC23807B35004211BA /* NewPostViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewPostViewController.swift; sourceTree = "<group>"; };
+		0EEE78F2239002F20009D8D8 /* RegionIntersects.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegionIntersects.swift; sourceTree = "<group>"; };
 		0EEE9DC82368DA110059080D /* DismissKeyboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DismissKeyboard.swift; sourceTree = "<group>"; };
 		0EEFEB29237D6DD700025973 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		0EF0E08F238EF1080012771C /* Location.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Location.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				0EEE39D4236F286800762DF7 /* Alert.swift */,
 				0EEDF40E237C48F100B1E189 /* HexColor.swift */,
 				0EED570D23833C7F00B321D9 /* TimeInterval.swift */,
+				0EEE78F2239002F20009D8D8 /* RegionIntersects.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -277,6 +280,7 @@
 				0EED570E23833C7F00B321D9 /* TimeInterval.swift in Sources */,
 				0EF0E090238EF1080012771C /* Location.swift in Sources */,
 				0EEDF40F237C48F100B1E189 /* HexColor.swift in Sources */,
+				0EEE78F3239002F20009D8D8 /* RegionIntersects.swift in Sources */,
 				0EEFEB2A237D6DD700025973 /* PostTableViewCell.swift in Sources */,
 				0EEE4CCD23807B35004211BA /* NewPostViewController.swift in Sources */,
 				0EE0C63B236889B3001DC789 /* LoginViewController.swift in Sources */,
