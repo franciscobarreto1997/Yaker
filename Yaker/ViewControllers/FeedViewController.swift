@@ -40,12 +40,10 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         
 //        createLocations()
         getLocations()
-        getPosts()
         setupTableView()
         setupTabBar()
         setupTopBar()
         setupSegmentedControl()
-        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -163,49 +161,6 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
   
     }
     
-    func getPosts() {
-        
-        
-                        
-        let postRef = self.ref.child("posts")
-                
-        postRef.observe(DataEventType.value, with: { (snapshot) in
-          let postDict = snapshot.value as? [String : AnyObject] ?? [:]
-            self.posts = []
-            for post in postDict {
-                 let content = post.value["content"] as! String
-                let sumOfLikes = post.value["sumOfLikes"] as! Int
-                let userID = post.value["userID"] as! String
-                let createdAt = post.value["createdAt"] as! String
-                let postID = post.value["id"] as! String
-                let likes = post.value["likes"] as! Dictionary<String, Bool>
-                                
-                let dateFormatter = DateFormatter()
-                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
-                let date = dateFormatter.date(from: createdAt)
-                                
-                let newPost = Post(content: content, sumOfLikes: sumOfLikes, userID: userID, createdAt: date!, id: postID, likes: likes)
-                
-                self.posts.append(newPost)
-                
-                switch self.segmentedControl.selectedSegmentIndex {
-                case 1:
-                    let sortedPosts = self.posts.sorted() { $0.sumOfLikes > $1.sumOfLikes }
-                    self.posts = sortedPosts
-                    self.tableView.reloadData()
-                default:
-                    let sortedPosts = self.posts.sorted() { $0.createdAt! > $1.createdAt! }
-                    self.posts = sortedPosts
-                    self.tableView.reloadData()
-                }
-                
-                self.postsCountLabel.text = String(self.posts.count)
-            }
-            
-        })
-                
-    }
-    
     @IBAction func segmentedControlChanged(_ sender: UISegmentedControl) {
         
         switch segmentedControl.selectedSegmentIndex {
@@ -261,26 +216,60 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         locationRef.observe(DataEventType.value) { (snapshot) in
             let locationDict = snapshot.value as? [String : AnyObject] ?? [:]
             for location in locationDict {
+                
                 let name = location.value["name"] as! String
                 let latitude = location.value["latitude"] as! Double
                 let longitude = location.value["longitude"] as! Double
-                
+                let posts = location.value["posts"] as? [String : AnyObject] ?? [:]
+                    
                 let newLocation = Location(name: name, latitude: latitude, longitude: longitude)
+                    
+                for post in posts {
+                    
+                    let content = post.value["content"] as! String
+                    let sumOfLikes = post.value["sumOfLikes"] as! Int
+                    let userID = post.value["userID"] as! String
+                    let createdAt = post.value["createdAt"] as! String
+                    let postID = post.value["id"] as! String
+                    let likes = post.value["likes"] as! Dictionary<String, Bool>
+                    
+                    let dateFormatter = DateFormatter()
+                    
+                    dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
+                    
+                    let date = dateFormatter.date(from: createdAt)
+                                                   
+                    let newPost = Post(content: content, sumOfLikes: sumOfLikes, userID: userID, createdAt: date!, id: postID, likes: likes)
+                    
+                    newLocation.posts.append(newPost)
+                                        
+                }
                 
-                self.locations.append(newLocation)
+                if !newLocation.posts.isEmpty {
+                    self.locations.append(newLocation)
+                }
             }
+                        
             self.monitorRegions()
             self.setupLocationServices()
+            self.updateInterface()
             
         }
+        
     }
     
     func createLocations() {
         let home = Location(name: "home", latitude: 38.706476, longitude: -9.341905)
         
-        let homeLocationInfo = ["name": home.name, "latitude": home.latitude, "longitude": home.longitude] as [String : AnyObject]
+        let homeLocationInfo = ["name": home.name!, "latitude": home.latitude!, "longitude": home.longitude!] as [String : AnyObject]
         
         ref.child("locations").childByAutoId().setValue(homeLocationInfo)
+        
+        let lewagon = Location(name: "lewagon", latitude: 38.726080, longitude: -9.145480)
+        
+        let lewagonLocationInfo = ["name": lewagon.name!, "latitude": lewagon.latitude!, "longitude": lewagon.longitude!] as [String : AnyObject]
+        
+        ref.child("locations").childByAutoId().setValue(lewagonLocationInfo)
         
     }
     
@@ -289,8 +278,10 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             locationManager.startMonitoring(for: location.geofenceRegion!)
         }
     }
+
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        print("hey")
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         
         let homeLocation = self.locations[0]
@@ -298,6 +289,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         let userLocation = Location(name: "user", latitude: locValue.latitude, longitude: locValue.longitude)
         if (userLocation.geofenceRegion!.intersects(homeLocation.geofenceRegion!)) {
             currentRegion = homeLocation.geofenceRegion
+            updateInterface()
         }
     }
     
@@ -315,6 +307,27 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     
     func locationManager(_ manager: CLLocationManager, didExitRegion region: CLRegion) {
         displayAlert(withTitle: "Your out", withMessage: "You left \(region.identifier) buddy!")
+    }
+    
+    func updateInterface() {
+        for location in self.locations {
+            if location.name == self.currentRegion?.identifier {
+                self.posts = location.posts
+                switch self.segmentedControl.selectedSegmentIndex {
+                case 1:
+                    let sortedPosts = self.posts.sorted() { $0.sumOfLikes > $1.sumOfLikes }
+                    self.posts = sortedPosts
+                    self.tableView.reloadData()
+                default:
+                    let sortedPosts = self.posts.sorted() { $0.createdAt! > $1.createdAt! }
+                    self.posts = sortedPosts
+                    self.tableView.reloadData()
+                }
+                
+                self.postsCountLabel.text = String(self.posts.count)
+                
+            }
+        }
     }
     
 }

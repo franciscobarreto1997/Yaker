@@ -15,7 +15,7 @@ class Location {
     var latitude: Double?
     var longitude: Double?
     var geofenceRegion: CLCircularRegion?
-    var posts: [Post]?
+    var posts =  [Post]()
     
     init(name: String, latitude: Double, longitude: Double) {
         self.name = name

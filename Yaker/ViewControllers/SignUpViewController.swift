@@ -24,7 +24,7 @@ class SignUpViewController: UIViewController {
     
     var ref: DatabaseReference!
     
-    var currentUserID = Auth.auth().currentUser!.uid
+    var currentUserID = Auth.auth().currentUser?.uid
 
     override func viewDidLoad() {
         super.viewDidLoad()

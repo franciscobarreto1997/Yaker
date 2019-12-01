@@ -28,7 +28,7 @@ class NewPostViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-                
+                        
         ref = Database.database().reference()
                         
         setupViews()
@@ -76,8 +76,6 @@ class NewPostViewController: UIViewController {
                 if name == self.currentRegion?.identifier {
                     locationID = location.key
                     self.ref.child("locations").child(locationID!).child("posts").childByAutoId().setValue(newPostInfo)
-                    return
-                } else {
                     return
                 }
             }
