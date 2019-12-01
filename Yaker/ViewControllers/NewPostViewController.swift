@@ -48,34 +48,39 @@ class NewPostViewController: UIViewController {
             displayAlert(withTitle: "Invalid Message", withMessage: "Your yak can't be smaller than 3 letters")
             return
         }
-        
-        let newPost = self.ref.child("posts").childByAutoId()
-        
+                
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
         let date = dateFormatter.string(from: Date.init())
-        
-        let postID = newPost.key!
-        
+                
         let likesDictionary = [currentUserID: true]
         
-        let newPostInfo = ["content": String(newPostText!),
-                           "userID": String(currentUserID),
-                           "sumOfLikes": 1,
-                           "createdAt": date,
-                           "id": postID,
-                           "likes": likesDictionary] as [String : AnyObject]
+
         
         ref.child("locations").observeSingleEvent(of: .value) { (snapshot) in
             let locations = snapshot.value as! [String: AnyObject]
             var name: String?
             var locationID: String?
+            
             for location in locations {
                 name = location.value["name"] as? String
                 if name == self.currentRegion?.identifier {
                     locationID = location.key
-                    self.ref.child("locations").child(locationID!).child("posts").childByAutoId().setValue(newPostInfo)
+                    
+                    let postRef = self.ref.child("locations").child(locationID!).child("posts").childByAutoId()
+                    let postID = postRef.key!
+                    
+                    let newPostInfo = ["content": String(newPostText!),
+                                       "userID": String(self.currentUserID),
+                                       "sumOfLikes": 1,
+                                       "createdAt": date,
+                                       "id": postID,
+                                       "likes": likesDictionary,
+                                       "locationID": locationID!] as [String : AnyObject]
+                    
+                    
+                    postRef.setValue(newPostInfo)
                     return
                 }
             }

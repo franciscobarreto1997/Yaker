@@ -16,6 +16,7 @@ class Post {
     var createdAt: Date?
     var id: String?
     var likes: Dictionary<String, Bool>?
+    var locationId: String?
     
     func addOneLike() {
         return sumOfLikes += 1
@@ -26,13 +27,14 @@ class Post {
     }
     
     
-    init(content: String, sumOfLikes: Int, userID: String, createdAt: Date, id: String, likes: Dictionary<String, Bool>) {
+    init(content: String, sumOfLikes: Int, userID: String, createdAt: Date, id: String, likes: Dictionary<String, Bool>, locationID: String) {
         self.content = content
         self.sumOfLikes = sumOfLikes
         self.userId = userID
         self.createdAt = createdAt
         self.id = id
         self.likes = likes
+        self.locationId = locationID
     }
     
     //MARK: Add location

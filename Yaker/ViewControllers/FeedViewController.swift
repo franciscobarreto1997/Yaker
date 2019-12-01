@@ -104,8 +104,8 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             let rowIndex =  indexPath.row
             
             let post = posts[rowIndex]
-            let sumOfLikes = self.ref.child("posts").child(post.id!).child("sumOfLikes")
-            let likes = self.ref.child("posts").child(post.id!).child("likes")
+            let sumOfLikes = self.ref.child("locations").child(post.locationId!).child("posts").child(post.id!).child("sumOfLikes")
+            let likes = self.ref.child("locations").child(post.locationId!).child("posts").child(post.id!).child("likes")
             let likesDictionary = [currentUserID: true]
             
             
@@ -136,8 +136,8 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
             let rowIndex =  indexPath.row
              
             let post = posts[rowIndex]
-            let sumOfLikes = self.ref.child("posts").child(post.id!).child("sumOfLikes")
-            let likes = self.ref.child("posts").child(post.id!).child("likes")
+            let sumOfLikes = self.ref.child("locations").child(post.locationId!).child("posts").child(post.id!).child("sumOfLikes")
+            let likes = self.ref.child("locations").child(post.locationId!).child("posts").child(post.id!).child("likes")
             let likesDictionary = [currentUserID: true]
             
             
@@ -216,13 +216,13 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
         locationRef.observe(DataEventType.value) { (snapshot) in
             let locationDict = snapshot.value as? [String : AnyObject] ?? [:]
             for location in locationDict {
-                
                 let name = location.value["name"] as! String
                 let latitude = location.value["latitude"] as! Double
                 let longitude = location.value["longitude"] as! Double
                 let posts = location.value["posts"] as? [String : AnyObject] ?? [:]
+                let id = location.value["id"] as! String
                     
-                let newLocation = Location(name: name, latitude: latitude, longitude: longitude)
+                let newLocation = Location(name: name, latitude: latitude, longitude: longitude, id: id)
                     
                 for post in posts {
                     
@@ -232,6 +232,7 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let createdAt = post.value["createdAt"] as! String
                     let postID = post.value["id"] as! String
                     let likes = post.value["likes"] as! Dictionary<String, Bool>
+                    let locationID = post.value["locationID"] as! String
                     
                     let dateFormatter = DateFormatter()
                     
@@ -239,17 +240,15 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
                     
                     let date = dateFormatter.date(from: createdAt)
                                                    
-                    let newPost = Post(content: content, sumOfLikes: sumOfLikes, userID: userID, createdAt: date!, id: postID, likes: likes)
+                    let newPost = Post(content: content, sumOfLikes: sumOfLikes, userID: userID, createdAt: date!, id: postID, likes: likes, locationID: locationID)
                     
                     newLocation.posts.append(newPost)
                                         
                 }
                 
-                if !newLocation.posts.isEmpty {
                     self.locations.append(newLocation)
-                }
             }
-                        
+                                    
             self.monitorRegions()
             self.setupLocationServices()
             self.updateInterface()
@@ -259,17 +258,25 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     func createLocations() {
-        let home = Location(name: "home", latitude: 38.706476, longitude: -9.341905)
+        let homeRef = ref.child("locations").childByAutoId()
         
-        let homeLocationInfo = ["name": home.name!, "latitude": home.latitude!, "longitude": home.longitude!] as [String : AnyObject]
+        let homeID = homeRef.key!
         
-        ref.child("locations").childByAutoId().setValue(homeLocationInfo)
+        let home = Location(name: "home", latitude: 38.706476, longitude: -9.341905, id: homeID)
         
-        let lewagon = Location(name: "lewagon", latitude: 38.726080, longitude: -9.145480)
+        let homeInfo = ["name": home.name!, "latitude": home.latitude!, "longitude": home.longitude!, "id": home.id!] as [String : AnyObject]
         
-        let lewagonLocationInfo = ["name": lewagon.name!, "latitude": lewagon.latitude!, "longitude": lewagon.longitude!] as [String : AnyObject]
+        homeRef.setValue(homeInfo)
         
-        ref.child("locations").childByAutoId().setValue(lewagonLocationInfo)
+        let lewagonRef = ref.child("locations").childByAutoId()
+        
+        let lewagonID = lewagonRef.key!
+        
+        let lewagon = Location(name: "lewagon", latitude: 38.726080, longitude: -9.145480, id: lewagonID)
+        
+        let lewagonInfo = ["name": lewagon.name!, "latitude": lewagon.latitude!, "longitude": lewagon.longitude!, "id": lewagon.id!] as [String : AnyObject]
+        
+        lewagonRef.setValue(lewagonInfo)
         
     }
     
@@ -281,12 +288,11 @@ class FeedViewController: UIViewController, UITableViewDelegate, UITableViewData
 
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        print("hey")
         guard let locValue: CLLocationCoordinate2D = manager.location?.coordinate else { return }
         
         let homeLocation = self.locations[0]
         
-        let userLocation = Location(name: "user", latitude: locValue.latitude, longitude: locValue.longitude)
+        let userLocation = Location(name: "user", latitude: locValue.latitude, longitude: locValue.longitude, id: "1")
         if (userLocation.geofenceRegion!.intersects(homeLocation.geofenceRegion!)) {
             currentRegion = homeLocation.geofenceRegion
             updateInterface()
